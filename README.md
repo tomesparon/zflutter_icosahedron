@@ -1,16 +1,19 @@
-# shapetest
+# zflutter shapetest - icosahedron and also cube dice
 
-A new Flutter project.
+This is a port of a codepen for Zdog - https://codepen.io/tomesparon/pen/GRzRNea?editors=0010
+
+In this, the aim was to just get a working icosahedral dice. There may be ways to improve and make code more DRY but still learning how to use flutter so will have to do for now.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+All the code for icosahedron is in main.dart file so run as with any other flutter project.
 
-A few resources to get you started if this is your first Flutter project:
+For Flutter 3, we need to use the updated version of zflutter package which is not on pub.dev so use this below in pubspec:
+```
+  zflutter:
+    git:
+      url: https://github.com/CarGuo/zflutter.git
+      path: zflutter/
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+flutter run
