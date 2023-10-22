@@ -1,306 +1,191 @@
+// ignore_for_file: library_private_types_in_public_api
+import 'dart:developer' as developer;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:zflutter/zflutter.dart';
-import 'constants.dart';
+
+import 'icosahedron.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(Dices());
 }
 
-class Icosahedron extends StatelessWidget {
-  const Icosahedron({
-    Key? key,
-  }) : super(key: key);
+class Dices extends StatefulWidget {
+  const Dices({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ZGroup(sortMode: SortMode.inherit, children: <Widget>[
-      ZPositioned(
-          translate: ZVector.only(z: capApothem),
-          child: ZGroup(children: const <Widget>[
-            CapFace(
-              iteration: 0,
-              color: Color.fromARGB(255, 255, 3, 3),
-              number: "1",
-            ),
-            CapFace(
-              iteration: 1,
-              color: Color.fromARGB(255, 8, 8, 255),
-              number: "7",
-            ),
-            CapFace(
-              iteration: 2,
-              color: Color.fromARGB(255, 3, 219, 100),
-              number: "15",
-            ),
-            CapFace(
-              iteration: 3,
-              color: Color.fromARGB(255, 208, 215, 4),
-              number: "5",
-            ),
-            CapFace(
-              iteration: 4,
-              color: Color.fromARGB(255, 140, 2, 232),
-              number: "13",
-            ),
-          ])),
-      ZPositioned(
-          translate: ZVector.only(z: capApothem),
-          child: ZGroup(children: const <Widget>[
-            SideFace(
-              iteration: 0,
-              color: Color.fromARGB(255, 255, 3, 3),
-              number: "19",
-            ),
-            SideFace(
-              iteration: 1,
-              color: Color.fromARGB(255, 8, 8, 255),
-              number: "17",
-            ),
-            SideFace(
-              iteration: 2,
-              color: Color.fromARGB(255, 3, 219, 100),
-              number: "12",
-            ),
-            SideFace(
-              iteration: 3,
-              color: Color.fromARGB(255, 208, 215, 4),
-              number: "18",
-            ),
-            SideFace(
-              iteration: 4,
-              color: Color.fromARGB(255, 140, 2, 232),
-              number: "11",
-            ),
-          ])),
-      ZPositioned(
-          translate: ZVector.only(z: capApothem * -1),
-          rotate: ZVector.only(x: tau / 2),
-          child: ZGroup(children: const <Widget>[
-            SideFace(
-              iteration: 0,
-              color: Color.fromARGB(255, 255, 3, 3),
-              number: "2",
-            ),
-            SideFace(
-              iteration: 1,
-              color: Color.fromARGB(255, 8, 8, 255),
-              number: "10",
-            ),
-            SideFace(
-              iteration: 2,
-              color: Color.fromARGB(255, 3, 219, 100),
-              number: "3",
-            ),
-            SideFace(
-              iteration: 3,
-              color: Color.fromARGB(255, 208, 215, 4),
-              number: "9",
-            ),
-            SideFace(
-              iteration: 4,
-              color: Color.fromARGB(255, 140, 2, 232),
-              number: "4",
-            ),
-          ])),
-      ZPositioned(
-          // BOTTOM
-          translate: ZVector.only(z: -capApothem),
-          rotate: ZVector.only(x: tau / 2),
-          child: ZGroup(children: const <Widget>[
-            CapFace(
-              iteration: 0,
-              color: Color.fromARGB(255, 255, 3, 3),
-              number: "20",
-            ),
-            CapFace(
-              iteration: 1,
-              color: Color.fromARGB(255, 8, 8, 255),
-              number: "8",
-            ),
-            CapFace(
-              iteration: 2,
-              color: Color.fromARGB(255, 3, 219, 100),
-              number: "16",
-            ),
-            CapFace(
-              iteration: 3,
-              color: Color.fromARGB(255, 208, 215, 4),
-              number: "6",
-            ),
-            CapFace(
-              iteration: 4,
-              color: Color.fromARGB(255, 140, 2, 232),
-              number: "14",
-            ),
-          ])),
-    ]);
-  }
+  _DicesState createState() => _DicesState();
 }
 
-class SideFace extends StatelessWidget {
-  final int iteration;
-  final Color color;
-  final String number;
-  const SideFace({
-    Key? key,
-    required this.iteration,
-    required this.color,
-    required this.number,
-  }) : super(key: key);
+class _DicesState extends State<Dices> with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+
+  late SpringSimulation simulation;
+  int num = 1;
+  int num2 = 1;
+  ZVector rotation = ZVector.zero;
+  double zRotation = 0;
 
   @override
-  Widget build(BuildContext context) {
-    return ZPositioned(
-      rotate: ZVector.only(y: (tau / 5) * -iteration),
-      translate: ZVector.only(y: sideHeight / 2 * -1, z: capApothem * -1),
-      child: ZGroup(
-        children: <Widget>[
-          ZPositioned(
-            //MAIN DIFFERENCE TO CAPS
-            rotate: ZVector.only(x: -sideTilt),
-            translate: ZVector.only(z: capApothem * -1 /*, y: faceRadius / 2*/),
-            child: ZGroup(
-              children: <Widget>[
-                ZPositioned(
-                    //Other DIFFERENCE TO CAPS
-                    rotate: const ZVector.only(x: tau / 2),
-                    translate: ZVector.only(
-                        y: faceRadius /
-                            2.0), // not really sure but fR needs to be + not -ve
-                    child: Face(color: color)),
-                ZPositioned(
-                    // rotate: const ZVector.only(z: 0.1), //for wobble
-                    translate: ZVector.only(y: faceRadius / 2),
-                    child: Number(numb: number)),
-              ],
-            ),
-          ),
-        ],
+  void initState() {
+    super.initState();
+
+    simulation = SpringSimulation(
+      const SpringDescription(
+        mass: 1,
+        stiffness: 20,
+        damping: 2,
       ),
+      1, // starting point
+      0, // ending point
+      1, // velocity
     );
-  }
-}
 
-class CapFace extends StatelessWidget {
-  final int iteration;
-  final String number;
-  final Color color;
-  const CapFace(
-      {Key? key,
-      required this.iteration,
-      required this.color,
-      required this.number})
-      : super(key: key);
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..addListener(() {
+        // rotation = rotation + ZVector.all(0.1);
+        setState(() {});
+      });
+  }
+
+  void random() {
+    zRotation = Random().nextDouble() * tau;
+    num = Random().nextInt(20) + 1;
+    num2 = 20 - Random().nextInt(20);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ZPositioned(
-      rotate: ZVector.only(y: (tau / 5) * -iteration),
-      translate: ZVector.only(y: sideHeight / 2 * -1, z: capApothem * -1),
-      child: ZGroup(
-        children: <Widget>[
-          ZPositioned(
-            rotate: ZVector.only(x: -capTilt),
-            translate: ZVector.only(z: capApothem * -1),
-            child: ZGroup(
-              sortMode: SortMode.stack, // stops render flicker
-              children: <Widget>[
-                ZPositioned(
-                    translate: ZVector.only(y: -faceRadius / 2),
-                    child: Face(color: color)),
-                // ZPositioned(
-                //     translate: ZVector.only(y: -faceRadius / 2),
-                //     child: ZShape(
-                //       path: [
-                //         ZMove.only(x: -0.4),
-                //         ZLine.only(x: 0.4),
-                //       ],
-                //       closed: false,
-                //       stroke: 0.1,
-                //       color: Color.fromARGB(255, 194, 50, 194),
-                //     ))
-                ZPositioned(
-                    translate: ZVector.only(y: -faceRadius / 2),
-                    // rotate: ZVector.only(z: 0.1),//only to introduce wobble
-                    child: Number(numb: number)),
-              ],
-            ),
-          ),
-        ],
-      ),
+    final curvedValue = CurvedAnimation(
+      curve: Curves.ease,
+      parent: animationController,
     );
-  }
-}
-
-class Face extends StatelessWidget {
-  final Color color;
-
-  const Face({Key? key, required this.color}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ZPolygon(
-      stroke: 0.0,
-      sides: 3,
-      radius: faceRadius,
-      color: color,
-      fill: true,
+    final firstHalf = CurvedAnimation(
+      curve: const Interval(0, 1),
+      parent: animationController,
     );
-  }
-}
+    final secondHalf = CurvedAnimation(
+      curve: const Interval(0, 0.3),
+      parent: animationController,
+    );
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return ZDragDetector(
-      builder: (context, controller) {
-        return ZIllustration(
-          zoom: 100,
+    // Adds simulated movement when used as scalefactor for translate and scale below
+    final zoom = (simulation.x(animationController.value)).abs() / 2 + 0.5;
+
+    return GestureDetector(
+      onTap: () {
+        if (animationController.isAnimating)
+          animationController.reset();
+        else {
+          animationController.forward(from: 0);
+          random();
+        }
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: ZIllustration(
+          zoom: 1,
           children: [
             ZPositioned(
-              rotate: controller.rotate,
+              translate: ZVector.only(x: 130 * zoom),
               child: ZGroup(
-                children: const <Widget>[
-                  // ZPositioned(
-                  //     // rotate: ZVector.only(x: tau / 4),
-                  //     child: ZPolygon(
-                  //   stroke: 0.1,
-                  //   sides: 6,
-                  //   radius: 1,
-                  //   color: Color.fromARGB(255, 90, 90, 90),
-                  // )),
-                  Icosahedron(),
+                children: [
+                  ZPositioned(
+                    scale: ZVector.all(61.5 * (zoom * 2)),
+                    rotate:
+                        getRotation(num2).multiplyScalar(curvedValue.value) -
+                            ZVector.all((tau / 2) * (firstHalf.value)) -
+                            ZVector.all((tau / 2) * (secondHalf.value)),
+                    child: ZPositioned(
+                        rotate: ZVector.only(
+                            z: -zRotation * 1.9 * (animationController.value)),
+                        child: Icosahedron()),
+                  ),
+                ],
+              ),
+            ),
+            ZPositioned(
+              translate: ZVector.only(x: -130 * zoom),
+              child: ZGroup(
+                children: [
+                  ZPositioned(
+                    scale: ZVector.all(61.5 * (zoom * 2)),
+                    rotate: getRotation(num).multiplyScalar(curvedValue.value) -
+                        ZVector.all((tau / 2) * (firstHalf.value)) -
+                        ZVector.all((tau / 2) * (secondHalf.value)),
+                    child: ZPositioned(
+                        rotate: ZVector.only(
+                            z: -zRotation * 2.1 * (animationController.value)),
+                        child: Icosahedron()),
+                  ),
                 ],
               ),
             ),
           ],
-        );
-      },
-    );
-  }
-}
-
-class Number extends StatelessWidget {
-  const Number({Key? key, required this.numb}) : super(key: key);
-  final String? numb;
-
-  @override
-  Widget build(BuildContext context) {
-    return ZToBoxAdapter(
-      height: 0.3,
-      width: 0.34,
-      child: Container(
-        // color: Color.fromARGB(125, 246, 246, 246),
-        child: Image.asset(
-          'assets/$numb.png',
-          fit: BoxFit.cover,
         ),
       ),
     );
   }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+}
+
+//Set the dice to correct face on ending
+// tau here is basically 360 degrees but as rad
+ZVector getRotation(int num) {
+  developer.log('$num', name: 'my.app.category');
+  switch (num) {
+    case 1:
+      return ZVector.only(x: 4 * tau / 6); //seems right
+    case 2:
+      return ZVector.zero; // Face up correct
+    case 3:
+      return ZVector.only(x: tau / 2, y: tau / 6);
+    case 4:
+      return ZVector.only(
+        x: tau / 6,
+        z: tau / 6,
+      );
+    case 5:
+      return ZVector.only(x: -tau / 6, y: tau / 10); //looks right
+    case 6:
+      return ZVector.only(x: 2 * tau / 6, z: tau / 12);
+    case 7:
+      return ZVector.zero;
+    case 8:
+      return ZVector.only(x: tau / 6, y: -tau / 6);
+    case 9:
+      return ZVector.zero;
+    case 10:
+      return ZVector.zero;
+    case 11:
+      return ZVector.zero;
+    case 12:
+      return ZVector.zero;
+    case 13:
+      return ZVector.only(x: -tau / 6, y: tau / 3);
+    case 14:
+      return ZVector.only(x: tau / 6, y: tau / 6);
+    case 15:
+      return ZVector.only(x: -tau / 6, y: -tau / 10);
+    case 16:
+      return ZVector.zero;
+    case 17:
+      return ZVector.zero;
+    case 18:
+      return ZVector.zero;
+    case 19:
+      return ZVector.only(y: tau / 2); //correct
+    case 20:
+      return ZVector.only(x: tau / 6); //correct
+  }
+  throw ('num $num is not in the dice');
 }
