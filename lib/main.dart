@@ -45,7 +45,7 @@ class _DicesState extends State<Dices> with SingleTickerProviderStateMixin {
 
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1200),
     )..addListener(() {
         // rotation = rotation + ZVector.all(0.1);
         setState(() {});
