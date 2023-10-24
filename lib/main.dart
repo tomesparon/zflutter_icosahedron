@@ -45,7 +45,7 @@ class _DicesState extends State<Dices> with SingleTickerProviderStateMixin {
 
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 800),
     )..addListener(() {
         // rotation = rotation + ZVector.all(0.1);
         setState(() {});
@@ -140,52 +140,50 @@ class _DicesState extends State<Dices> with SingleTickerProviderStateMixin {
 
 //Set the dice to correct face on ending
 // tau here is basically 360 degrees but as rad
+// Also these are best guesses and may not be exactly
 ZVector getRotation(int num) {
-  developer.log('$num', name: 'my.app.category');
+  // developer.log('$num', name: 'my.dice.roll');
   switch (num) {
     case 1:
-      return ZVector.only(x: 4 * tau / 6); //seems right
+      return ZVector.only(x: 4 * tau / 6);
     case 2:
-      return ZVector.zero; // Face up correct
+      return ZVector.zero; // Always correct
     case 3:
-      return ZVector.only(x: tau / 2, y: tau / 6);
+      return ZVector.only(x: tau / 2, y: tau / 10);
     case 4:
-      return ZVector.only(
-        x: tau / 6,
-        z: tau / 6,
-      );
+      return ZVector.only(y: 2 * tau / 10);
     case 5:
-      return ZVector.only(x: -tau / 6, y: tau / 10); //looks right
+      return ZVector.only(x: -tau / 6, y: tau / 10);
     case 6:
-      return ZVector.only(x: 2 * tau / 6, z: tau / 12);
+      return ZVector.only(x: 2 * tau / 6, y: -tau / 10);
     case 7:
-      return ZVector.zero;
+      return ZVector.only(x: -tau / 6, y: -3 * tau / 10);
     case 8:
-      return ZVector.only(x: tau / 6, y: -tau / 6);
+      return ZVector.only(x: 2 * tau / 6, y: 3 * tau / 10);
     case 9:
-      return ZVector.zero;
+      return ZVector.only(x: tau / 2, y: -tau / 10);
     case 10:
-      return ZVector.zero;
+      return ZVector.only(y: -2 * tau / 10); //seems correct
     case 11:
-      return ZVector.zero;
+      return ZVector.only(x: tau / 2, y: -2 * tau / 10);
     case 12:
-      return ZVector.zero;
+      return ZVector.only(y: -tau / 10); //seems correct
     case 13:
-      return ZVector.only(x: -tau / 6, y: tau / 3);
+      return ZVector.only(x: -tau / 6, y: 3 * tau / 10);
     case 14:
-      return ZVector.only(x: tau / 6, y: tau / 6);
+      return ZVector.only(x: 2 * tau / 6, y: -3 * tau / 10);
     case 15:
       return ZVector.only(x: -tau / 6, y: -tau / 10);
     case 16:
-      return ZVector.zero;
+      return ZVector.only(x: 2 * tau / 6, y: tau / 10);
     case 17:
-      return ZVector.zero;
+      return ZVector.only(x: tau / 2, y: 2 * tau / 10);
     case 18:
-      return ZVector.zero;
+      return ZVector.only(y: tau / 10); //seems correct
     case 19:
-      return ZVector.only(y: tau / 2); //correct
+      return ZVector.only(y: tau / 2);
     case 20:
-      return ZVector.only(x: tau / 6); //correct
+      return ZVector.only(x: tau / 6);
   }
   throw ('num $num is not in the dice');
 }
