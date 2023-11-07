@@ -7,8 +7,47 @@ import 'package:zflutter/zflutter.dart';
 
 import 'icosahedron.dart';
 
-void main() {
-  runApp(const Dices());
+void main() => runApp(const ScaffoldExampleApp());
+
+class ScaffoldExampleApp extends StatelessWidget {
+  const ScaffoldExampleApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        scaffoldBackgroundColor: Colors.grey,
+      ),
+      home: ScaffoldExample(),
+    );
+  }
+}
+
+class ScaffoldExample extends StatefulWidget {
+  const ScaffoldExample({super.key});
+
+  @override
+  State<ScaffoldExample> createState() => _ScaffoldExampleState();
+}
+
+class _ScaffoldExampleState extends State<ScaffoldExample> {
+  int _count = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('D20 Simulation'),
+      ),
+      body: const Dices(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => setState(() => _count++),
+        tooltip: 'Roll Dice',
+        child: const Icon(Icons.play_circle_outlined),
+      ),
+    );
+  }
 }
 
 class Dices extends StatefulWidget {
