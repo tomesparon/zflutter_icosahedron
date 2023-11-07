@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 import 'package:zflutter/zflutter.dart';
 import 'constants.dart';
 
@@ -73,7 +70,7 @@ class Icosahedron extends StatelessWidget {
           ])),
       ZPositioned(
           translate: ZVector.only(z: capApothem * -1),
-          rotate: ZVector.only(x: tau / 2),
+          rotate: const ZVector.only(x: tau / 2),
           child: ZGroup(children: const <Widget>[
             SideFace(
               iteration: 0,
@@ -104,7 +101,7 @@ class Icosahedron extends StatelessWidget {
       ZPositioned(
           // BOTTOM
           translate: ZVector.only(z: -capApothem),
-          rotate: ZVector.only(x: tau / 2),
+          rotate: const ZVector.only(x: tau / 2),
           child: ZGroup(children: const <Widget>[
             CapFace(
               iteration: 0,
@@ -258,6 +255,7 @@ class Number extends StatelessWidget {
     return ZToBoxAdapter(
       height: 0.3,
       width: 0.34,
+      // ignore: avoid_unnecessary_containers
       child: Container(
         // color: Color.fromARGB(125, 246, 246, 246),
         child: Image.asset(

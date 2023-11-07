@@ -1,5 +1,4 @@
 // ignore_for_file: library_private_types_in_public_api
-import 'dart:developer' as developer;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ import 'package:zflutter/zflutter.dart';
 import 'icosahedron.dart';
 
 void main() {
-  runApp(Dices());
+  runApp(const Dices());
 }
 
 class Dices extends StatefulWidget {
@@ -78,9 +77,9 @@ class _DicesState extends State<Dices> with SingleTickerProviderStateMixin {
 
     return GestureDetector(
       onTap: () {
-        if (animationController.isAnimating)
+        if (animationController.isAnimating) {
           animationController.reset();
-        else {
+        } else {
           animationController.forward(from: 0);
           random();
         }
@@ -103,7 +102,7 @@ class _DicesState extends State<Dices> with SingleTickerProviderStateMixin {
                     child: ZPositioned(
                         rotate: ZVector.only(
                             z: -zRotation * 1.9 * (animationController.value)),
-                        child: Icosahedron()),
+                        child: const Icosahedron()),
                   ),
                 ],
               ),
@@ -120,7 +119,7 @@ class _DicesState extends State<Dices> with SingleTickerProviderStateMixin {
                     child: ZPositioned(
                         rotate: ZVector.only(
                             z: -zRotation * 2.1 * (animationController.value)),
-                        child: Icosahedron()),
+                        child: const Icosahedron()),
                   ),
                 ],
               ),
@@ -145,45 +144,45 @@ ZVector getRotation(int num) {
   // developer.log('$num', name: 'my.dice.roll');
   switch (num) {
     case 1:
-      return ZVector.only(x: 4 * tau / 6);
+      return const ZVector.only(x: 4 * tau / 6);
     case 2:
       return ZVector.zero; // Always correct
     case 3:
-      return ZVector.only(x: tau / 2, y: tau / 10);
+      return const ZVector.only(x: tau / 2, y: tau / 10);
     case 4:
-      return ZVector.only(y: 2 * tau / 10);
+      return const ZVector.only(y: 2 * tau / 10);
     case 5:
-      return ZVector.only(x: -tau / 6, y: tau / 10);
+      return const ZVector.only(x: -tau / 6, y: tau / 10);
     case 6:
-      return ZVector.only(x: 2 * tau / 6, y: -tau / 10);
+      return const ZVector.only(x: 2 * tau / 6, y: -tau / 10);
     case 7:
-      return ZVector.only(x: -tau / 6, y: -3 * tau / 10);
+      return const ZVector.only(x: -tau / 6, y: -3 * tau / 10);
     case 8:
-      return ZVector.only(x: 2 * tau / 6, y: 3 * tau / 10);
+      return const ZVector.only(x: 2 * tau / 6, y: 3 * tau / 10);
     case 9:
-      return ZVector.only(x: tau / 2, y: -tau / 10);
+      return const ZVector.only(x: tau / 2, y: -tau / 10);
     case 10:
-      return ZVector.only(y: -2 * tau / 10); //seems correct
+      return const ZVector.only(y: -2 * tau / 10); //seems correct
     case 11:
-      return ZVector.only(x: tau / 2, y: -2 * tau / 10);
+      return const ZVector.only(x: tau / 2, y: -2 * tau / 10);
     case 12:
-      return ZVector.only(y: -tau / 10); //seems correct
+      return const ZVector.only(y: -tau / 10); //seems correct
     case 13:
-      return ZVector.only(x: -tau / 6, y: 3 * tau / 10);
+      return const ZVector.only(x: -tau / 6, y: 3 * tau / 10);
     case 14:
-      return ZVector.only(x: 2 * tau / 6, y: -3 * tau / 10);
+      return const ZVector.only(x: 2 * tau / 6, y: -3 * tau / 10);
     case 15:
-      return ZVector.only(x: -tau / 6, y: -tau / 10);
+      return const ZVector.only(x: -tau / 6, y: -tau / 10);
     case 16:
-      return ZVector.only(x: 2 * tau / 6, y: tau / 10);
+      return const ZVector.only(x: 2 * tau / 6, y: tau / 10);
     case 17:
-      return ZVector.only(x: tau / 2, y: 2 * tau / 10);
+      return const ZVector.only(x: tau / 2, y: 2 * tau / 10);
     case 18:
-      return ZVector.only(y: tau / 10); //seems correct
+      return const ZVector.only(y: tau / 10); //seems correct
     case 19:
-      return ZVector.only(y: tau / 2);
+      return const ZVector.only(y: tau / 2);
     case 20:
-      return ZVector.only(x: tau / 6);
+      return const ZVector.only(x: tau / 6);
   }
   throw ('num $num is not in the dice');
 }

@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-
 final double root3 = sqrt(3);
 final double root5 = sqrt(5);
 final double phi = (1 + root5) / 2;
