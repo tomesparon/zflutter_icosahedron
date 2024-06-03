@@ -1,4 +1,4 @@
-# zflutter shapetest - icosahedron and also cube dice
+# zflutter - icosahedron and also cube dice
 
 This is a port of a codepen for Zdog - https://codepen.io/tomesparon/pen/GRzRNea?editors=0010
 
